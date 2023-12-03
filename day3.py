@@ -1,3 +1,6 @@
+from typing import List
+
+
 def extract_number(string: str, pos: int) -> int:
     result = ""
     while pos > 0 and string[pos - 1].isnumeric():
@@ -6,6 +9,33 @@ def extract_number(string: str, pos: int) -> int:
         result += string[pos]
         pos += 1
     return int(result)
+
+
+def find_numbers(numbers_list: List['int'], index: int, pre_pre_line: str, pre_line: str, current_line: str) -> None:
+    # Horizontal
+    if index > 0:
+        if pre_line[index - 1].isnumeric():
+            numbers_list.append(extract_number(pre_line, index - 1))
+    if index < len(pre_line) - 1:
+        if pre_line[index + 1].isnumeric():
+            numbers_list.append(extract_number(pre_line, index + 1))
+    # Vertical
+    if len(pre_pre_line) == len(pre_line) and pre_pre_line[index].isnumeric():
+        numbers_list.append(extract_number(pre_pre_line, index))
+    if len(current_line) == len(pre_line) and current_line[index].isnumeric():
+        numbers_list.append(extract_number(current_line, index))
+    # Diagonal
+    if index > 1:
+        if len(pre_pre_line) > 0 and pre_pre_line[index - 1].isnumeric() and \
+                pre_pre_line[index] == ".":
+            numbers_list.append(extract_number(pre_pre_line, index - 1))
+        if current_line[index - 1].isnumeric() and current_line[index] == ".":
+            numbers_list.append(extract_number(current_line, index - 1))
+    if index < len(pre_line) - 2:
+        if pre_pre_line[index + 1].isnumeric() and pre_pre_line[index] == ".":
+            numbers_list.append(extract_number(pre_pre_line, index + 1))
+        if current_line[index + 1].isnumeric() and current_line[index] == ".":
+            numbers_list.append(extract_number(current_line, index + 1))
 
 
 # Part 1
@@ -19,35 +49,9 @@ with open("inputs/day3.txt", "r") as file:
             char = previous_line[i]
             if char == "." or char.isnumeric():
                 continue
-
-            # Horizontal
-            if i > 0:
-                if previous_line[i - 1].isnumeric():
-                    numbers.append(extract_number(previous_line, i - 1))
-            if i < len(previous_line) - 1:
-                if previous_line[i + 1].isnumeric():
-                    numbers.append(extract_number(previous_line, i + 1))
-            # Vertical
-            if len(previous_previous_line) == len(previous_line) and previous_previous_line[i].isnumeric():
-                numbers.append(extract_number(previous_previous_line, i))
-            if len(line) == len(previous_line) and line[i].isnumeric():
-                numbers.append(extract_number(line, i))
-            # Diagonal
-            if i > 1:
-                if len(previous_previous_line) > 0 and previous_previous_line[i - 1].isnumeric() and \
-                        previous_previous_line[i] == ".":
-                    numbers.append(extract_number(previous_previous_line, i - 1))
-                if line[i - 1].isnumeric() and line[i] == ".":
-                    numbers.append(extract_number(line, i - 1))
-            if i < len(previous_line) - 2:
-                if previous_previous_line[i + 1].isnumeric() and previous_previous_line[i] == ".":
-                    numbers.append(extract_number(previous_previous_line, i + 1))
-                if line[i + 1].isnumeric() and line[i] == ".":
-                    numbers.append(extract_number(line, i + 1))
-
+            find_numbers(numbers, i, previous_previous_line, previous_line, line)
         previous_previous_line = previous_line
         previous_line = line
-
 print(sum(numbers))
 
 # Part 2
@@ -61,39 +65,12 @@ with open("inputs/day3.txt", "r") as file:
             char = previous_line[i]
             if char != "*":
                 continue
-
             numbers = []
-            # Horizontal
-            if i > 0:
-                if previous_line[i - 1].isnumeric():
-                    numbers.append(extract_number(previous_line, i - 1))
-            if i < len(previous_line) - 1:
-                if previous_line[i + 1].isnumeric():
-                    numbers.append(extract_number(previous_line, i + 1))
-            # Vertical
-            if len(previous_previous_line) == len(previous_line) and previous_previous_line[i].isnumeric():
-                numbers.append(extract_number(previous_previous_line, i))
-            if len(line) == len(previous_line) and line[i].isnumeric():
-                numbers.append(extract_number(line, i))
-            # Diagonal
-            if i > 1:
-                if len(previous_previous_line) > 0 and previous_previous_line[i - 1].isnumeric() and \
-                        previous_previous_line[i] == ".":
-                    numbers.append(extract_number(previous_previous_line, i - 1))
-                if line[i - 1].isnumeric() and line[i] == ".":
-                    numbers.append(extract_number(line, i - 1))
-            if i < len(previous_line) - 2:
-                if previous_previous_line[i + 1].isnumeric() and previous_previous_line[i] == ".":
-                    numbers.append(extract_number(previous_previous_line, i + 1))
-                if line[i + 1].isnumeric() and line[i] == ".":
-                    numbers.append(extract_number(line, i + 1))
-
+            find_numbers(numbers, i, previous_previous_line, previous_line, line)
             if len(numbers) == 2:
                 ratios.append(numbers[0] * numbers[1])
             elif len(numbers) > 2:
                 ratios.pop()
-
         previous_previous_line = previous_line
         previous_line = line
-
 print(sum(ratios))
