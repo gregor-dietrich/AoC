@@ -69,8 +69,6 @@ with open("inputs/day3.txt", "r") as file:
             find_numbers(numbers, i, previous_previous_line, previous_line, line)
             if len(numbers) == 2:
                 ratios.append(numbers[0] * numbers[1])
-            elif len(numbers) > 2:
-                ratios.pop()
         previous_previous_line = previous_line
         previous_line = line
 print(sum(ratios))
