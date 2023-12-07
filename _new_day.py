@@ -9,7 +9,7 @@ for file in [f for f in os.listdir() if os.path.isfile(f)]:
 next_filename = f"day{last_day + 1}"
 
 with open(f"{next_filename}.py", "w", encoding="utf-8") as file:
-    file.write('with open("inputs/day6.txt") as file:\n')
+    file.write(f'with open("inputs/{next_filename}.txt") as file:\n')
     file.write('\tfor line in file:\n')
     file.write('\t\tpass\n')
 with open(f"inputs/{next_filename}.txt", "w", encoding="utf-8"):
