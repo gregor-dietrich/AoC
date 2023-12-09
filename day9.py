@@ -1,15 +1,12 @@
-def process_sequences(sequence: str) -> (int, int):
-	sequence = [[int(n) for n in sequence.strip().split()]]
-	while not all(item == 0 for item in sequence[-1]):
-		next_sequence = []
-		for i in range(1, len(sequence[-1])):
-			next_sequence.append(sequence[-1][i] - sequence[-1][i - 1])
-		sequence.append(next_sequence)
-	next_val, previous_val = 0, sequence[0][0]
-	for i in range(1, len(sequence))[::-1]:
-		next_val += sequence[i - 1][-1]
-		previous_val = sequence[i - 1][0] - sequence[i][0]
-		sequence[i - 1].insert(0, sequence[i - 1][0] - sequence[i][0])
+def process_sequences(main_sequence: str) -> (int, int):
+	sequences = [[int(val) for val in main_sequence.strip().split()]]
+	while not all(item == 0 for item in sequences[-1]):
+		sequences.append([sequences[-1][i] - sequences[-1][i - 1] for i in range(1, len(sequences[-1]))])
+	next_val, previous_val = 0, sequences[0][0]
+	for i in range(1, len(sequences))[::-1]:
+		next_val += sequences[i - 1][-1]
+		previous_val = sequences[i - 1][0] - sequences[i][0]
+		sequences[i - 1].insert(0, sequences[i - 1][0] - sequences[i][0])
 	return next_val, previous_val
 
 
