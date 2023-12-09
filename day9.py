@@ -19,5 +19,4 @@ with open("inputs/day9.txt") as file:
 		next_value, previous_value = process_sequences(line)
 		sum_of_next_values += next_value
 		sum_of_previous_values += previous_value
-print(sum_of_next_values)
-print(sum_of_previous_values)
+print("%s\n%s" % (sum_of_next_values, sum_of_previous_values))
